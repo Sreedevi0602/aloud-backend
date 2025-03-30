@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'myapp',
     'rest_framework',
     'corsheaders',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
