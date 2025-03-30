@@ -8,3 +8,6 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 
 # Create your views here.
+
+def addbook(request):
+    return render(request, "addbook.html")
