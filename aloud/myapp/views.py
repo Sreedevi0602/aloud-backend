@@ -14,7 +14,7 @@ def addbook(request):
         form = BooksForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('booklist')  # Redirect to the books list after adding
+            return redirect('booklist')  
     else:
         form = BooksForm()
     
