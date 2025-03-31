@@ -14,6 +14,7 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-dark">
                     <tr>
+                        <th>Sl. No.</th>
                         <th>Book ID</th>
                         <th>Name</th>
                         <th>Author</th>
@@ -26,10 +27,11 @@
                 <tbody>
                     {% for book in books %}
                     <tr>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ book.bookid }}</td>
                         <td>{{ book.name }}</td>
                         <td>{{ book.author }}</td>
-                        <td>${{ book.price }}</td>
+                        <td>₹{{ book.price }}</td>
                         <td>{{ book.category }}</td>
                         <td>{{ book.description }}</td>
                         <td>
