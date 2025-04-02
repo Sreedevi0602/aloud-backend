@@ -6,5 +6,10 @@ urlpatterns = [
     path('addbook/', addbook, name='addbookurl'),  
     path('booklist/', booklist, name='booklisturl'),  
     path('api/books/', book_list, name='book-list-url'),
-    path('api/books/<str:bookid>/', views.book_detail, name='book-detail-url')
+    path('api/books/<str:bookid>/', views.book_detail, name='book-detail-url'),
+    path('create-categories/', views.create_categories, name='create_categories'),
+    path('create-category/', views.create_category, name='create_category'),
+    path('category/<int:category_id>/', category_detail, name='category_detail'),
+    path('api/categories/', views.CategoryList.as_view(), name='category_list'),
+    path('api/categories/<int:id>/', views.CategoryDetail.as_view(), name='category_detail'),
 ]
