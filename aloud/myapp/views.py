@@ -24,6 +24,32 @@ def addbook(request):
 def booklist(request):
     books = Books.objects.all()
     return render(request, 'booklist.html', {'books': books})
+
+def delete(request, book_id):
+    book = get_object_or_404(Books, pk=book_id)
+    book.delete()
+    return redirect('booklisturl')
+
+def edit(request, book_id):
+    book = get_object_or_404(Books, id=book_id)
+    return render(request, "edit.html", {"book": book})
+
+def update(request):
+    if request.method == "POST":
+        book_id = request.POST.get("id")
+        book = get_object_or_404(Books, id=book_id)
+
+        book.name = request.POST.get("name")
+        book.author = request.POST.get("author")
+        book.price = request.POST.get("price")
+        book.category = request.POST.get("category")
+        book.description = request.POST.get("description")
+
+        if 'photo' in request.FILES:
+            book.photo = request.FILES['photo']
+
+        book.save()
+        return redirect('booklisturl')  
     
 @api_view(['GET'])
 def book_list(request):
@@ -46,6 +72,8 @@ def book_detail(request, bookid):
 def create_categories(request):
     categories = Category.objects.all()
     return render(request, 'create_categories.html', {'categories': categories})
+
+
 
 def create_category(request):
     if request.method == 'POST':

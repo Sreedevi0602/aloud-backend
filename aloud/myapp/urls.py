@@ -5,6 +5,9 @@ from myapp.views import *
 urlpatterns = [
     path('addbook/', addbook, name='addbookurl'),  
     path('booklist/', booklist, name='booklisturl'),  
+    path('delete/<str:book_id>/', delete, name='delete_book'),
+    path('edit/<str:book_id>/', edit, name='edit_book'),
+    path('update/', update, name='update_book'),
     path('api/books/', book_list, name='book-list-url'),
     path('api/books/<str:bookid>/', views.book_detail, name='book-detail-url'),
     path('create-categories/', views.create_categories, name='create_categories'),
