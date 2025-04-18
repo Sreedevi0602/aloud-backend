@@ -13,6 +13,7 @@ urlpatterns = [
     path('create-categories/', views.create_categories, name='create_categories'),
     path('create-category/', views.create_category, name='create_category'),
     path('category/<int:category_id>/', category_detail, name='category_detail'),
+    path('assign-books/<int:category_id>/', views.assign_books_to_categories, name='assign_books_to_categories'),
     path('api/categories/', views.CategoryList.as_view(), name='category_list'),
     path('api/categories/<int:id>/', views.CategoryDetail.as_view(), name='category_details'),
 ]

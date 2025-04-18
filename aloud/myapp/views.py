@@ -99,4 +99,28 @@ class CategoryDetail(APIView):
 
 def category_detail(request, category_id):
     category = get_object_or_404(Category, id=category_id)
-    return render(request, 'category_detail.html', {'category':category})
+    books_in_category = Books.objects.filter(categories=category)
+    return render(request, 'category_detail.html', {'category':category, 'books_in_category': books_in_category})
+
+def assign_books_to_categories(request, category_id):
+    all_books = Books.objects.all()
+    all_categories = Category.objects.all()
+    
+    if request.method == 'POST':
+        for book in all_books:
+            key = f'book_{book.id}_categories'
+            selected_cats = request.POST.getlist(key)
+            if selected_cats:
+                book.categories.set(selected_cats)  # Overwrites with new list
+            else:
+                book.categories.clear()  # Remove all categories if none selected
+        return redirect('category_detail', category_id=category_id)
+
+    return render(request, 'assign_books.html', {
+        'all_books': all_books,
+        'all_categories': all_categories,
+        'category_id': category_id
+    })
+
+
+   

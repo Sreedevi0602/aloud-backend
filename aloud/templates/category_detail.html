@@ -12,10 +12,47 @@
     <div class="container mt-5">
         <div class="heading" style="margin-bottom: 50px;"><h1><center>{{ category.name }}</center></h1></div>
         <div class="card shadow-lg p-4">
+            <div class="table-responsive">
+                <table class="table table-bordered mt-4">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Sl. No.</th>
+                            <th>Book ID</th>
+                            <th>Name</th>
+                            <th>Author</th>
+                            <th>Price</th>
+                            <th>Description</th>
+                            <th>Photo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in books_in_category %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ book.bookid }}</td>
+                                <td>{{ book.name }}</td>
+                                <td>{{ book.author }}</td>
+                                <td>₹{{ book.price }}</td>
+                                <td>{{ book.description }}</td>
+                                <td>
+                                    {% if book.photo %}
+                                        <img src="{{ book.photo.url }}" alt="Book Image" width="50">
+                                    {% else %}
+                                        No Image
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="7" class="text-center">No books in this category yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             
   
             <div class="text-center mt-4">
-                <a href="{% url 'create_categories' %}" class="btn btn-primary">Back to Categories</a>
+                <a href="{% url 'create_categories' %}" class="btn btn-secondary">Back to Categories</a>
+                <a href="{% url 'assign_books_to_categories' category.id %}" class="btn btn-primary">Add to Categories</a>
             </div>
             
         </div>

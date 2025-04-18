@@ -10,6 +10,7 @@ class Books(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     photo = models.FileField(upload_to='media')
+    categories = models.ManyToManyField('Category', related_name='books', blank=True)
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
