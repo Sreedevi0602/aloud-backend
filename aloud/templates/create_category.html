@@ -37,11 +37,15 @@
 
 <div class="container">
     <h2>Create a New Category</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="id_name" class="form-label">Category Name</label>
+            <label for="id_name" class="form-label">Category Title</label>
             {{ form.name }}
+        </div>
+        <div class="mb-3">
+            <label for="id_image" class="form-label">Image</label>
+            {{ form.image }}
         </div>
         <button type="submit" class="btn btn-primary">Create Category</button>
     </form>

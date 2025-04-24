@@ -77,7 +77,7 @@ def create_categories(request):
 
 def create_category(request):
     if request.method == 'POST':
-        form = CategoryForm(request.POST)
+        form = CategoryForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('create_categories')
@@ -88,8 +88,9 @@ def create_category(request):
 class CategoryList(APIView):
     def get(self, request):
         categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
+        serializer = CategorySerializer(categories, many=True, context={'request': request})
         return Response(serializer.data)
+
 
 class CategoryDetail(APIView):
     def get(self, request, id):
