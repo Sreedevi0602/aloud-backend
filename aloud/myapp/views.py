@@ -7,6 +7,10 @@ from . serializer import *
 from . forms import *
 from django.http import JsonResponse
 from django.http import HttpResponse
+from rest_framework import status
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 
@@ -123,5 +127,37 @@ def assign_books_to_categories(request, category_id):
         'category_id': category_id
     })
 
+# API View - Register User
+class RegisterUser(APIView):
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'User registered'}, status=201)
+        return Response(serializer.errors, status=400)
 
-   
+# API View - Login User
+class LoginUser(APIView):
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            login(request, user)
+            if user.is_superuser:
+                return Response({'redirect_url': 'http://localhost:8000/userlist/'})
+            return Response({'redirect_url': 'http://localhost:5174/'})
+        return Response(serializer.errors, status=400)
+
+# API View - User List (JSON API for React if needed)
+class UserList(APIView):
+    def get(self, request):
+        users = CustomUser.objects.filter(is_superuser=False)
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+# HTML View - User List (for Django Admin in users.html)
+# @method_decorator(login_required, name='dispatch')
+class UserListHTMLView(APIView):
+    def get(self, request):
+        users = CustomUser.objects.filter(is_superuser=False)
+        return render(request, 'users.html', {'users': users})

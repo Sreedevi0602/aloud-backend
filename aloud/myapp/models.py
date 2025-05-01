@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
@@ -18,3 +19,13 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
+class CustomUser(AbstractUser):
+    phone_number = models.CharField(max_length=15, blank=True)
+    userid = models.CharField(max_length=100, unique=True)
+
+    def save(self, *args, **kwargs):
+        if not self.userid:
+            import uuid
+            self.userid = str(uuid.uuid4())[:8]
+        super().save(*args, **kwargs)

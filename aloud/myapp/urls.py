@@ -16,4 +16,11 @@ urlpatterns = [
     path('assign-books/<int:category_id>/', views.assign_books_to_categories, name='assign_books_to_categories'),
     path('api/categories/', views.CategoryList.as_view(), name='category_list'),
     path('api/categories/<int:id>/', views.CategoryDetail.as_view(), name='category_details'),
+    # API endpoints (React frontend)
+    path('api/register/', views.RegisterUser.as_view(), name='register'),
+    path('api/login/', views.LoginUser.as_view(), name='login'),
+    path('api/users/', views.UserList.as_view(), name='user-list-url'),
+
+    # HTML page for admin
+    path('userlist/', views.UserListHTMLView.as_view(), name='userlisturl'),
 ]
