@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from . models import *
 from rest_framework.response import Response
 from . serializer import *
@@ -11,6 +11,10 @@ from rest_framework import status
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
+from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 
 # Create your views here.
 
@@ -137,6 +141,22 @@ class RegisterUser(APIView):
         return Response(serializer.errors, status=400)
 
 # API View - Login User
+@method_decorator(csrf_protect, name='dispatch')
+class LoginUser(APIView):
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            login(request, user)
+            request.session['username'] = user.username  # Save to session
+
+            response_data = {
+                'redirect_url': 'http://localhost:8000/userlist/' if user.is_superuser else 'http://localhost:5174/',
+                'username': user.username
+            }
+            return Response(response_data)
+        return Response(serializer.errors, status=400)
+'''
 class LoginUser(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -147,6 +167,7 @@ class LoginUser(APIView):
                 return Response({'redirect_url': 'http://localhost:8000/userlist/'})
             return Response({'redirect_url': 'http://localhost:5174/'})
         return Response(serializer.errors, status=400)
+'''
 
 # API View - User List (JSON API for React if needed)
 class UserList(APIView):
@@ -161,3 +182,27 @@ class UserListHTMLView(APIView):
     def get(self, request):
         users = CustomUser.objects.filter(is_superuser=False)
         return render(request, 'users.html', {'users': users})
+
+
+
+
+#To get current user in the format "Hi Username" 
+@api_view(['GET'])
+def current_user(request):
+    if request.user.is_authenticated:
+        return Response({'username': request.user.username})
+    return Response({'username': None})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_info(request):
+    user = request.user
+    return Response({
+        'username': user.username,
+        'email': user.email,
+        'userid': user.userid
+    })
+
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    return JsonResponse({"detail": "CSRF cookie set"})

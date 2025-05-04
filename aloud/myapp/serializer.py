@@ -64,11 +64,15 @@ class LoginSerializer(serializers.Serializer):
         try:
             user_obj = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
+            print("Email not found")
             raise serializers.ValidationError("Invalid Credentials")
+
+        print(f"Found user: {user_obj.username}")
 
         user = authenticate(username=user_obj.username, password=password)
 
         if user is None:
+            print("Authentication failed for valid email")
             raise serializers.ValidationError("Invalid Credentials")
 
         data['user'] = user

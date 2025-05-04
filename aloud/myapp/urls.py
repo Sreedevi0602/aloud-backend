@@ -23,4 +23,15 @@ urlpatterns = [
 
     # HTML page for admin
     path('userlist/', views.UserListHTMLView.as_view(), name='userlisturl'),
+
+    #To get current user in the format "Hi Username"
+    path('api/current-user/', views.current_user, name='current_user'),
+
+    path('api/user-info/', views.user_info, name='user-info'),
+
+   
+
+    path('api/csrf/', get_csrf_token),
+
+
 ]
